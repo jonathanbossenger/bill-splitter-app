@@ -15,51 +15,33 @@ The Bill Splitter app is a React Native mobile application built with Expo that 
 - Utilizes `expo-image-picker` for image selection
 - Supports image editing before selection
 
-### 3. OCR Processing
-- Demonstrates bill processing workflow
-- Shows how to structure OCR integration
-- Currently uses sample data for demonstration
-- Ready for cloud OCR service integration
+### 3. ML Kit OCR Processing
+- On-device text recognition using Google's ML Kit
+- Fast and privacy-focused processing
+- Works offline without internet connection
+- Supports multiple scripts (Latin, Chinese, Japanese, Korean, Devanagari)
+- No API costs or cloud dependencies
 
-### Cloud OCR Integration Options
+### ML Kit Text Recognition
 
-For production deployment, you can integrate with:
+The app uses ML Kit for on-device text recognition:
 
-**Google Cloud Vision API**
 ```javascript
-import vision from '@google-cloud/vision';
+import TextRecognition from '@react-native-ml-kit/text-recognition';
 
 const processImage = async (imageUri) => {
-  const client = new vision.ImageAnnotatorClient();
-  const [result] = await client.textDetection(imageUri);
-  const text = result.fullTextAnnotation.text;
-  return parseReceiptText(text);
+  const result = await TextRecognition.recognize(imageUri);
+  const recognizedText = result.text;
+  return parseReceiptText(recognizedText);
 };
 ```
 
-**AWS Textract**
-```javascript
-import AWS from 'aws-sdk';
-
-const textract = new AWS.Textract();
-const processImage = async (imageUri) => {
-  const params = { Document: { Bytes: imageData } };
-  const result = await textract.detectDocumentText(params).promise();
-  const text = result.Blocks.map(block => block.Text).join('\n');
-  return parseReceiptText(text);
-};
-```
-
-**Azure Computer Vision**
-```javascript
-import { ComputerVisionClient } from '@azure/cognitiveservices-computervision';
-
-const processImage = async (imageUri) => {
-  const result = await client.recognizePrintedText(true, imageUri);
-  const text = extractTextFromResult(result);
-  return parseReceiptText(text);
-};
-```
+**Benefits of ML Kit:**
+- **On-device processing** - Privacy-focused, no data sent to servers
+- **Offline support** - Works without internet connection
+- **Free** - No API costs
+- **Fast** - Quick processing on modern devices
+- **Multi-language** - Supports various scripts and languages
 
 ### 4. Bill Item Parsing
 - Automatically identifies items and prices from extracted text
@@ -111,11 +93,11 @@ const [isProcessing, setIsProcessing] = useState(false); // Processing status
 ```
 
 ### OCR Processing
-The app demonstrates the OCR workflow:
-- Creates a processing state while analyzing
+The app uses ML Kit for text recognition:
+- Processes image using on-device ML Kit
 - Shows loading indicator to user
-- Currently uses sample data for demonstration
-- Designed to be replaced with actual OCR service
+- Extracts text using Google's ML Kit text recognition
+- Parses recognized text to identify bill items
 
 ### Text Parsing
 Smart parsing algorithm that:

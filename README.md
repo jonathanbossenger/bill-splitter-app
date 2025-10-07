@@ -10,16 +10,17 @@ A React Native mobile app built with Expo that allows users to scan restaurant b
 - 📋 **Item Display**: View parsed bill items with names and prices
 - 🎨 **User-Friendly UI**: Clean and intuitive interface
 
-## Important Note
+## OCR Implementation
 
-**OCR Implementation**: This app currently uses a demonstration mode with sample data. For production use with real OCR capabilities, you'll need to integrate with a cloud-based OCR service such as:
+**ML Kit Text Recognition**: This app uses Google's ML Kit for on-device text recognition. ML Kit provides fast, accurate text recognition that works offline and doesn't require cloud services.
 
-- **Google Cloud Vision API** - Excellent text detection for receipts
-- **AWS Textract** - Document and receipt analysis
-- **Azure Computer Vision** - OCR and receipt processing
-- **Mindee Receipt OCR** - Specialized receipt parsing API
+### Features:
+- **On-device processing** - Fast and privacy-focused
+- **Offline support** - No internet connection required
+- **Free to use** - No API costs
+- **Supports multiple scripts** - Latin, Chinese, Devanagari, Japanese, and Korean
 
-The current implementation shows the app structure and UI flow. Replace the `processImage()` function in `App.js` with your chosen OCR service integration.
+ML Kit provides excellent text detection for receipts and is ideal for this use case.
 
 ## Installation
 
@@ -74,17 +75,10 @@ npm run web
 
 - **React Native**: Cross-platform mobile development
 - **Expo**: Development platform and tools
+- **@react-native-ml-kit/text-recognition**: ML Kit for on-device text recognition
 - **expo-camera**: Camera functionality
 - **expo-image-picker**: Image selection from gallery
 - **expo-image-manipulator**: Image processing utilities
-
-## OCR Integration (Production)
-
-For production use, integrate one of these OCR services:
-- **Google Cloud Vision API**: https://cloud.google.com/vision
-- **AWS Textract**: https://aws.amazon.com/textract/
-- **Azure Computer Vision**: https://azure.microsoft.com/en-us/services/cognitive-services/computer-vision/
-- **Mindee**: https://mindee.com/
 
 ## Permissions
 
@@ -106,7 +100,7 @@ bill-splitter-app/
 ## How It Works
 
 1. **Image Capture**: User captures or selects a bill image
-2. **OCR Processing**: The image is processed using text recognition
+2. **ML Kit OCR Processing**: The image is processed using Google's ML Kit text recognition on-device
 3. **Text Parsing**: Extracted text is parsed to identify items and prices
 4. **Display**: Items are displayed in a clean, organized list
 
@@ -116,7 +110,7 @@ bill-splitter-app/
 - Calculate individual shares and tips
 - Export bill details
 - Save bill history
-- Enhanced OCR accuracy with ML models
+- Support for multiple languages with ML Kit's script support
 
 ## License
 
