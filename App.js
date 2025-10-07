@@ -26,7 +26,7 @@ export default function App() {
     if (!hasPermissions) return;
 
     const result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ['images'],
       quality: 1,
       allowsEditing: true,
     });
@@ -43,7 +43,7 @@ export default function App() {
     if (!hasPermissions) return;
 
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ['images'],
       quality: 1,
       allowsEditing: true,
     });
