@@ -6,9 +6,20 @@ A React Native mobile app built with Expo that allows users to scan restaurant b
 
 - 📷 **Camera Integration**: Take photos of bills directly from your device camera
 - 🖼️ **Gallery Support**: Select bill images from your device gallery
-- 🔍 **OCR Text Recognition**: Automatically extract text and items from bill images
+- 🔍 **Bill Processing**: Demonstrates bill item extraction and parsing
 - 📋 **Item Display**: View parsed bill items with names and prices
 - 🎨 **User-Friendly UI**: Clean and intuitive interface
+
+## Important Note
+
+**OCR Implementation**: This app currently uses a demonstration mode with sample data. For production use with real OCR capabilities, you'll need to integrate with a cloud-based OCR service such as:
+
+- **Google Cloud Vision API** - Excellent text detection for receipts
+- **AWS Textract** - Document and receipt analysis
+- **Azure Computer Vision** - OCR and receipt processing
+- **Mindee Receipt OCR** - Specialized receipt parsing API
+
+The current implementation shows the app structure and UI flow. Replace the `processImage()` function in `App.js` with your chosen OCR service integration.
 
 ## Installation
 
@@ -65,7 +76,15 @@ npm run web
 - **Expo**: Development platform and tools
 - **expo-camera**: Camera functionality
 - **expo-image-picker**: Image selection from gallery
-- **Tesseract.js**: OCR text extraction from images
+- **expo-image-manipulator**: Image processing utilities
+
+## OCR Integration (Production)
+
+For production use, integrate one of these OCR services:
+- **Google Cloud Vision API**: https://cloud.google.com/vision
+- **AWS Textract**: https://aws.amazon.com/textract/
+- **Azure Computer Vision**: https://azure.microsoft.com/en-us/services/cognitive-services/computer-vision/
+- **Mindee**: https://mindee.com/
 
 ## Permissions
 

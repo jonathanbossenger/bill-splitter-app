@@ -16,9 +16,50 @@ The Bill Splitter app is a React Native mobile application built with Expo that 
 - Supports image editing before selection
 
 ### 3. OCR Processing
-- Powered by Tesseract.js for optical character recognition
-- Extracts text from bill images
-- Works entirely on-device (no server required)
+- Demonstrates bill processing workflow
+- Shows how to structure OCR integration
+- Currently uses sample data for demonstration
+- Ready for cloud OCR service integration
+
+### Cloud OCR Integration Options
+
+For production deployment, you can integrate with:
+
+**Google Cloud Vision API**
+```javascript
+import vision from '@google-cloud/vision';
+
+const processImage = async (imageUri) => {
+  const client = new vision.ImageAnnotatorClient();
+  const [result] = await client.textDetection(imageUri);
+  const text = result.fullTextAnnotation.text;
+  return parseReceiptText(text);
+};
+```
+
+**AWS Textract**
+```javascript
+import AWS from 'aws-sdk';
+
+const textract = new AWS.Textract();
+const processImage = async (imageUri) => {
+  const params = { Document: { Bytes: imageData } };
+  const result = await textract.detectDocumentText(params).promise();
+  const text = result.Blocks.map(block => block.Text).join('\n');
+  return parseReceiptText(text);
+};
+```
+
+**Azure Computer Vision**
+```javascript
+import { ComputerVisionClient } from '@azure/cognitiveservices-computervision';
+
+const processImage = async (imageUri) => {
+  const result = await client.recognizePrintedText(true, imageUri);
+  const text = extractTextFromResult(result);
+  return parseReceiptText(text);
+};
+```
 
 ### 4. Bill Item Parsing
 - Automatically identifies items and prices from extracted text
@@ -70,10 +111,11 @@ const [isProcessing, setIsProcessing] = useState(false); // Processing status
 ```
 
 ### OCR Processing
-The app uses Tesseract.js to process images:
-- Creates a worker for English language recognition
-- Processes the image and extracts text
-- Terminates worker after processing
+The app demonstrates the OCR workflow:
+- Creates a processing state while analyzing
+- Shows loading indicator to user
+- Currently uses sample data for demonstration
+- Designed to be replaced with actual OCR service
 
 ### Text Parsing
 Smart parsing algorithm that:
