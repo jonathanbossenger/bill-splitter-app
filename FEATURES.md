@@ -15,33 +15,42 @@ The Bill Splitter app is a React Native mobile application built with Expo that 
 - Utilizes `expo-image-picker` for image selection
 - Supports image editing before selection
 
-### 3. ML Kit OCR Processing
-- On-device text recognition using Google's ML Kit
-- Fast and privacy-focused processing
-- Works offline without internet connection
-- Supports multiple scripts (Latin, Chinese, Japanese, Korean, Devanagari)
-- No API costs or cloud dependencies
+### 3. OCR Processing (Demo Mode)
+- Demonstrates bill processing workflow
+- Shows how to structure OCR integration  
+- Currently uses sample data for demonstration
+- Works with Expo Go out of the box
 
-### ML Kit Text Recognition
+**Important**: Native OCR libraries (ML Kit, expo-ocr) require Expo Development Build and are not compatible with Expo Go. See [EXPO_GO_LIMITATION.md](./EXPO_GO_LIMITATION.md) for real OCR implementation options.
 
-The app uses ML Kit for on-device text recognition:
+### OCR Integration Options
 
+This app currently runs in **demo mode** for compatibility with Expo Go.
+
+**For Real OCR Implementation:**
+
+See [EXPO_GO_LIMITATION.md](./EXPO_GO_LIMITATION.md) for detailed guides on:
+
+1. **Expo Development Build + expo-ocr** (Recommended)
+   - On-device processing (offline, private, free)
+   - Requires custom development build
+
+2. **Cloud OCR APIs** (Works with Expo Go)
+   - Google Cloud Vision API
+   - AWS Textract  
+   - Azure Computer Vision
+   - Requires internet connection and API keys
+
+**Demo Mode Code (Current):**
 ```javascript
-import TextRecognition from '@react-native-ml-kit/text-recognition';
-
 const processImage = async (imageUri) => {
-  const result = await TextRecognition.recognize(imageUri);
-  const recognizedText = result.text;
-  return parseReceiptText(recognizedText);
+  // Simulates OCR processing
+  await new Promise(resolve => setTimeout(resolve, 2000));
+  const demoText = generateDemoReceiptText();
+  const extractedItems = parseReceiptText(demoText);
+  setBillItems(extractedItems);
 };
 ```
-
-**Benefits of ML Kit:**
-- **On-device processing** - Privacy-focused, no data sent to servers
-- **Offline support** - Works without internet connection
-- **Free** - No API costs
-- **Fast** - Quick processing on modern devices
-- **Multi-language** - Supports various scripts and languages
 
 ### 4. Bill Item Parsing
 - Automatically identifies items and prices from extracted text
@@ -93,11 +102,13 @@ const [isProcessing, setIsProcessing] = useState(false); // Processing status
 ```
 
 ### OCR Processing
-The app uses ML Kit for text recognition:
-- Processes image using on-device ML Kit
+The app demonstrates the OCR workflow:
+- Processes image with demo data (for Expo Go compatibility)
 - Shows loading indicator to user
-- Extracts text using Google's ML Kit text recognition
-- Parses recognized text to identify bill items
+- Simulates text extraction for demonstration
+- Parses sample text to demonstrate bill parsing
+
+**Note**: For real OCR implementation, see [EXPO_GO_LIMITATION.md](./EXPO_GO_LIMITATION.md)
 
 ### Text Parsing
 Smart parsing algorithm that:

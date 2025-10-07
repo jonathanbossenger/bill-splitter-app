@@ -10,17 +10,31 @@ A React Native mobile app built with Expo that allows users to scan restaurant b
 - 📋 **Item Display**: View parsed bill items with names and prices
 - 🎨 **User-Friendly UI**: Clean and intuitive interface
 
-## OCR Implementation
+## Important Note - Expo Go Limitation
 
-**ML Kit Text Recognition**: This app uses Google's ML Kit for on-device text recognition. ML Kit provides fast, accurate text recognition that works offline and doesn't require cloud services.
+**OCR Implementation**: This app currently uses **demo mode** with sample data because native OCR libraries (like ML Kit) are **not compatible with Expo Go**.
 
-### Features:
-- **On-device processing** - Fast and privacy-focused
-- **Offline support** - No internet connection required
-- **Free to use** - No API costs
-- **Supports multiple scripts** - Latin, Chinese, Devanagari, Japanese, and Korean
+### Current Status:
+- ✅ Works with Expo Go out of the box
+- ⚠️ Uses demo data instead of real OCR
+- 📝 Shows sample bill items for demonstration
 
-ML Kit provides excellent text detection for receipts and is ideal for this use case.
+### To Use Real OCR:
+
+You have two options:
+
+1. **Use Expo Development Build** with `expo-ocr` or `@react-native-ml-kit/text-recognition`
+   - Requires creating a custom development build using EAS
+   - Provides on-device OCR (offline, private, free)
+   - See [EXPO_GO_LIMITATION.md](./EXPO_GO_LIMITATION.md) for detailed instructions
+
+2. **Use Cloud OCR API** (Google Cloud Vision, AWS Textract, Azure Computer Vision)
+   - Works with Expo Go
+   - Requires internet connection
+   - Has API costs (free tiers available)
+   - See [EXPO_GO_LIMITATION.md](./EXPO_GO_LIMITATION.md) for implementation examples
+
+**For detailed information and implementation guides, see [EXPO_GO_LIMITATION.md](./EXPO_GO_LIMITATION.md)**
 
 ## Installation
 
@@ -75,10 +89,11 @@ npm run web
 
 - **React Native**: Cross-platform mobile development
 - **Expo**: Development platform and tools
-- **@react-native-ml-kit/text-recognition**: ML Kit for on-device text recognition
 - **expo-camera**: Camera functionality
 - **expo-image-picker**: Image selection from gallery
 - **expo-image-manipulator**: Image processing utilities
+
+**Note**: Currently in demo mode. For real OCR, see [EXPO_GO_LIMITATION.md](./EXPO_GO_LIMITATION.md)
 
 ## Permissions
 
@@ -100,9 +115,11 @@ bill-splitter-app/
 ## How It Works
 
 1. **Image Capture**: User captures or selects a bill image
-2. **ML Kit OCR Processing**: The image is processed using Google's ML Kit text recognition on-device
-3. **Text Parsing**: Extracted text is parsed to identify items and prices
+2. **Demo Processing**: Currently shows sample data (see EXPO_GO_LIMITATION.md for real OCR options)
+3. **Text Parsing**: Sample text is parsed to demonstrate the feature
 4. **Display**: Items are displayed in a clean, organized list
+
+**Note**: For real OCR implementation options, see [EXPO_GO_LIMITATION.md](./EXPO_GO_LIMITATION.md)
 
 ## Future Enhancements
 

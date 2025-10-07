@@ -3,7 +3,6 @@ import { StyleSheet, Text, View, TouchableOpacity, Image, FlatList, Alert, Scrol
 import { useState } from 'react';
 import { Camera } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
-import TextRecognition from '@react-native-ml-kit/text-recognition';
 
 export default function App() {
   const [image, setImage] = useState(null);
@@ -58,25 +57,51 @@ export default function App() {
   const processImage = async (imageUri) => {
     setIsProcessing(true);
     try {
-      // Use ML Kit for text recognition
-      const result = await TextRecognition.recognize(imageUri);
+      // Note: This is a demonstration implementation.
+      // For production use, integrate with a cloud OCR service like:
+      // - Google Cloud Vision API
+      // - AWS Textract
+      // - Azure Computer Vision
+      // - Or use expo-barcode-scanner for receipts with barcodes
       
-      // Extract the recognized text
-      const recognizedText = result.text;
+      // Simulate OCR processing delay
+      await new Promise(resolve => setTimeout(resolve, 2000));
       
-      // Parse the recognized text to extract bill items
-      const extractedItems = parseReceiptText(recognizedText);
+      // Generate sample bill items for demonstration
+      // In production, this would be replaced with actual OCR results
+      const demoText = generateDemoReceiptText();
+      const extractedItems = parseReceiptText(demoText);
       
       setBillItems(extractedItems);
       
-      // Log the recognized text for debugging
-      console.log('Recognized text:', recognizedText);
+      // Show info about OCR limitation
+      Alert.alert(
+        'Demo Mode',
+        'This is a demonstration using sample data. To use real OCR, integrate with Google Cloud Vision, AWS Textract, or Azure Computer Vision API.',
+        [{ text: 'OK' }]
+      );
     } catch (error) {
       console.error('Error processing image:', error);
       Alert.alert('Error', 'Failed to process the image. Please try again.');
     } finally {
       setIsProcessing(false);
     }
+  };
+
+  const generateDemoReceiptText = () => {
+    // Generate sample receipt data for demonstration
+    const sampleItems = [
+      'Burger $12.99',
+      'French Fries $4.50',
+      'Coke $2.99',
+      'Pizza Slice $8.99',
+      'Salad $6.50',
+      'Coffee $3.50',
+      'Subtotal $39.47',
+      'Tax $3.95',
+      'Total $43.42'
+    ];
+    return sampleItems.join('\n');
   };
 
   const parseReceiptText = (text) => {
