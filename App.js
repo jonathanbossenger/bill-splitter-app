@@ -86,18 +86,42 @@ export default function App() {
     lines.forEach((line, index) => {
       const trimmedLine = line.trim();
       if (trimmedLine.length > 0) {
-        // Match prices in formats like: 12.99, 12,99, $12.99, etc.
-        const priceMatch = trimmedLine.match(/(\$?\d+[.,]\d{2})/);
+        // Enhanced price matching - supports multiple formats:
+        // $12.99, 12.99, 12,99, $12, 52.00, etc.
+        // Matches price at the end of the line or anywhere in the line
+        const pricePatterns = [
+          /(\$?\d+[.,]\d{2})\s*$/,           // Price at end with 2 decimals: "Item 12.99"
+          /(\$\d+)\s*$/,                      // Dollar amount at end: "Item $12"
+          /\s+(\d+[.,]\d{2})\s*$/,            // Spaced price at end: "Item   52.00"
+          /[^\d](\d+[.,]\d{2})[^\d]*$/,       // Price at end with non-digit before: "Item. 52.00"
+          /(\$?\d+[.,]\d{2})/,                // Any price with decimals anywhere
+        ];
         
-        if (priceMatch) {
-          const price = priceMatch[0];
-          const itemName = trimmedLine.replace(price, '').trim();
+        let priceMatch = null;
+        let matchedPrice = null;
+        
+        // Try each pattern until we find a match
+        for (const pattern of pricePatterns) {
+          priceMatch = trimmedLine.match(pattern);
+          if (priceMatch) {
+            matchedPrice = priceMatch[1];
+            break;
+          }
+        }
+        
+        if (matchedPrice) {
+          // Extract item name by removing the price and cleaning up
+          let itemName = trimmedLine.replace(matchedPrice, '').trim();
+          // Remove trailing punctuation and extra spaces
+          itemName = itemName.replace(/[.,;:]+\s*$/, '').trim();
+          // Clean up multiple spaces
+          itemName = itemName.replace(/\s+/g, ' ');
           
           if (itemName.length > 0) {
             items.push({
               id: `${index}-${Date.now()}`,
               name: itemName,
-              price: price,
+              price: matchedPrice,
               fullText: trimmedLine,
             });
           }
