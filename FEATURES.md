@@ -15,49 +15,40 @@ The Bill Splitter app is a React Native mobile application built with Expo that 
 - Utilizes `expo-image-picker` for image selection
 - Supports image editing before selection
 
-### 3. OCR Processing
+### 3. OCR Processing (Demo Mode)
 - Demonstrates bill processing workflow
-- Shows how to structure OCR integration
+- Shows how to structure OCR integration  
 - Currently uses sample data for demonstration
-- Ready for cloud OCR service integration
+- Works with Expo Go out of the box
 
-### Cloud OCR Integration Options
+**Important**: Native OCR libraries (ML Kit, expo-ocr) require Expo Development Build and are not compatible with Expo Go. See [EXPO_GO_LIMITATION.md](./EXPO_GO_LIMITATION.md) for real OCR implementation options.
 
-For production deployment, you can integrate with:
+### OCR Integration Options
 
-**Google Cloud Vision API**
+This app currently runs in **demo mode** for compatibility with Expo Go.
+
+**For Real OCR Implementation:**
+
+See [EXPO_GO_LIMITATION.md](./EXPO_GO_LIMITATION.md) for detailed guides on:
+
+1. **Expo Development Build + expo-ocr** (Recommended)
+   - On-device processing (offline, private, free)
+   - Requires custom development build
+
+2. **Cloud OCR APIs** (Works with Expo Go)
+   - Google Cloud Vision API
+   - AWS Textract  
+   - Azure Computer Vision
+   - Requires internet connection and API keys
+
+**Demo Mode Code (Current):**
 ```javascript
-import vision from '@google-cloud/vision';
-
 const processImage = async (imageUri) => {
-  const client = new vision.ImageAnnotatorClient();
-  const [result] = await client.textDetection(imageUri);
-  const text = result.fullTextAnnotation.text;
-  return parseReceiptText(text);
-};
-```
-
-**AWS Textract**
-```javascript
-import AWS from 'aws-sdk';
-
-const textract = new AWS.Textract();
-const processImage = async (imageUri) => {
-  const params = { Document: { Bytes: imageData } };
-  const result = await textract.detectDocumentText(params).promise();
-  const text = result.Blocks.map(block => block.Text).join('\n');
-  return parseReceiptText(text);
-};
-```
-
-**Azure Computer Vision**
-```javascript
-import { ComputerVisionClient } from '@azure/cognitiveservices-computervision';
-
-const processImage = async (imageUri) => {
-  const result = await client.recognizePrintedText(true, imageUri);
-  const text = extractTextFromResult(result);
-  return parseReceiptText(text);
+  // Simulates OCR processing
+  await new Promise(resolve => setTimeout(resolve, 2000));
+  const demoText = generateDemoReceiptText();
+  const extractedItems = parseReceiptText(demoText);
+  setBillItems(extractedItems);
 };
 ```
 
@@ -112,10 +103,12 @@ const [isProcessing, setIsProcessing] = useState(false); // Processing status
 
 ### OCR Processing
 The app demonstrates the OCR workflow:
-- Creates a processing state while analyzing
+- Processes image with demo data (for Expo Go compatibility)
 - Shows loading indicator to user
-- Currently uses sample data for demonstration
-- Designed to be replaced with actual OCR service
+- Simulates text extraction for demonstration
+- Parses sample text to demonstrate bill parsing
+
+**Note**: For real OCR implementation, see [EXPO_GO_LIMITATION.md](./EXPO_GO_LIMITATION.md)
 
 ### Text Parsing
 Smart parsing algorithm that:

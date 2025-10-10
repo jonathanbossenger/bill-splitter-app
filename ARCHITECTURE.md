@@ -49,8 +49,8 @@
             ┌──────────────────┐
             │  processImage()  │
             │  ┌────────────┐  │
-            │  │ Tesseract  │  │
-            │  │ OCR Worker │  │
+            │  │  ML Kit    │  │
+            │  │   OCR      │  │
             │  └────────────┘  │
             └──────────────────┘
                       │
@@ -123,10 +123,9 @@ User Action → Permission Check → Image Capture → OCR Processing → Text P
 4. **Processing Layer**
    ```javascript
    processImage(imageUri)
-   ├── createWorker('eng')
-   ├── worker.recognize(imageUri)
-   ├── Extract text
-   └── worker.terminate()
+   ├── TextRecognition.recognize(imageUri)
+   ├── Extract text from result.text
+   └── Parse recognized text
    ```
 
 5. **Parsing Layer**
@@ -189,8 +188,8 @@ BillItem {
                   │
 ┌──────────────────────────────────────┐
 │         OCR Engine                   │
-│  - Tesseract.js                      │
-│  - WASM-based text recognition       │
+│  - @react-native-ml-kit/text-rec...  │
+│  - Google ML Kit on-device OCR       │
 └──────────────────────────────────────┘
                   │
 ┌──────────────────────────────────────┐
@@ -226,7 +225,7 @@ bill-splitter-app/
 ├── package.json              # Dependencies
 │   ├── expo packages
 │   ├── React Native
-│   └── Tesseract.js
+│   └── @react-native-ml-kit/text-recognition
 │
 ├── assets/                   # App resources
 │   ├── icon.png
@@ -375,9 +374,10 @@ App
 ## Performance Considerations
 
 1. **OCR Processing**
-   - Runs in Web Worker (Tesseract.js)
+   - Runs on-device using ML Kit
+   - Fast native processing
    - Doesn't block UI thread
-   - Can take 5-15 seconds
+   - Typically completes in 1-3 seconds
 
 2. **Image Handling**
    - Images stored as URIs

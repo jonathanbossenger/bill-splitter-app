@@ -15,7 +15,7 @@ A complete React Native mobile application built with Expo that allows users to:
 
 - **React Native 0.81.4** - Mobile app framework
 - **Expo SDK 54** - Development platform
-- **Tesseract.js 6.0.1** - OCR (Optical Character Recognition)
+- **@react-native-ml-kit/text-recognition 2.0.0** - On-device OCR using Google's ML Kit
 - **expo-camera** - Camera access
 - **expo-image-picker** - Image selection from gallery
 
@@ -39,11 +39,12 @@ A complete React Native mobile application built with Expo that allows users to:
 - Browse and choose existing photos
 - Image editing before processing
 
-#### 4. OCR Processing
-- Tesseract.js for text recognition
-- Extracts text from bill images
-- Works entirely on-device
-- No server required
+#### 4. ML Kit OCR Processing
+- Google's ML Kit for text recognition
+- On-device text extraction from bill images
+- Works entirely offline
+- No API costs or cloud dependencies
+- Supports multiple scripts and languages
 
 #### 5. Bill Parsing
 - Smart text parsing algorithm
@@ -95,7 +96,7 @@ The main application file includes:
    - `pickImage()` - Select image from gallery
 
 4. **Processing Functions**
-   - `processImage()` - Run OCR on image using Tesseract.js
+   - `processImage()` - Run OCR on image using ML Kit
    - `parseReceiptText()` - Parse OCR results into bill items
 
 5. **UI Components**
@@ -123,10 +124,10 @@ The main application file includes:
 
 #### package.json
 All necessary dependencies installed:
+- @react-native-ml-kit/text-recognition
 - expo-camera
 - expo-image-picker
 - expo-file-system
-- tesseract.js
 - react-native-web (for web support)
 - react-dom (for web support)
 
@@ -136,7 +137,7 @@ All necessary dependencies installed:
 2. User taps "Take Photo" or "Choose from Gallery"
 3. App requests permissions (first time only)
 4. User captures/selects bill image
-5. App processes image with Tesseract.js OCR
+5. App processes image with ML Kit OCR
 6. Text is extracted and parsed
 7. Items and prices are identified
 8. Results displayed in list format
@@ -186,7 +187,7 @@ These features could be added in future versions:
 
 Current known limitations:
 - OCR accuracy depends on image quality
-- English language only
+- Primarily optimized for Latin script (supports others with ML Kit's multi-script feature)
 - No bill splitting calculation yet
 - No persistent storage
 - Requires good lighting for best results
@@ -224,15 +225,15 @@ npm run web
 
 ### Notes
 
-- The app uses Tesseract.js for OCR, which runs entirely on-device
+- The app uses ML Kit for OCR, which runs entirely on-device
 - No backend server or API required
 - Works offline (except initial package download)
-- Cross-platform (iOS, Android, Web)
+- Cross-platform (iOS, Android)
 - Production-ready code structure
 - Easy to extend with additional features
 
 ---
 
-**Status**: ✅ Complete and ready for testing
+**Status**: ✅ Complete with ML Kit integration
 **Version**: 1.0.0
 **Last Updated**: 2024
