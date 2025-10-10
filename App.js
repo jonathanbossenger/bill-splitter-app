@@ -125,14 +125,6 @@ export default function App() {
               fullText: trimmedLine,
             });
           }
-        } else if (trimmedLine.length > 3 && !trimmedLine.match(/^[\d\s\-\+\*\/\=]+$/)) {
-          // Include lines that seem like item names (not just numbers)
-          items.push({
-            id: `${index}-${Date.now()}`,
-            name: trimmedLine,
-            price: 'N/A',
-            fullText: trimmedLine,
-          });
         }
       }
     });
