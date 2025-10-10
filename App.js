@@ -79,63 +79,100 @@ export default function App() {
     }
   };
 
+  const markItemLines = (lines) => {
+    const priceRegex = /[\$\€\£]?\d+(\.\d{2})?$/;
+    const result = new Array(lines.length).fill(false);
+    
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i].trim();
+      const hasPrice = priceRegex.test(line);
+      
+      if (hasPrice) {
+        // This line ends with a price, so mark it as an item line
+        result[i] = true;
+        
+        // Also check if previous line(s) might be part of the same item (multiline description)
+        let j = i - 1;
+        while (j >= 0 && !priceRegex.test(lines[j].trim()) && lines[j].trim() !== '') {
+          result[j] = true;
+          j--;
+        }
+      }
+    }
+    
+    return result;
+  };
+
   const parseReceiptText = (text) => {
     const lines = text.split('\n');
+    const itemLineFlags = markItemLines(lines);
     const items = [];
     
-    lines.forEach((line, index) => {
-      const trimmedLine = line.trim();
-      if (trimmedLine.length > 0) {
-        // Enhanced price matching - supports multiple formats:
-        // $12.99, 12.99, 12,99, $12, 52.00, etc.
-        // Matches price at the end of the line or anywhere in the line
-        const pricePatterns = [
-          /(\$?\d+[.,]\d{2})\s*$/,           // Price at end with 2 decimals: "Item 12.99"
-          /(\$\d+)\s*$/,                      // Dollar amount at end: "Item $12"
-          /\s+(\d+[.,]\d{2})\s*$/,            // Spaced price at end: "Item   52.00"
-          /[^\d](\d+[.,]\d{2})[^\d]*$/,       // Price at end with non-digit before: "Item. 52.00"
-          /(\$?\d+[.,]\d{2})/,                // Any price with decimals anywhere
-        ];
+    let currentItem = {
+      nameLines: [],
+      price: null,
+      startIndex: -1,
+    };
+    
+    for (let i = 0; i < lines.length; i++) {
+      const trimmedLine = lines[i].trim();
+      
+      if (itemLineFlags[i]) {
+        // This line is part of an item
+        const priceMatch = trimmedLine.match(/[\$\€\£]?(\d+(\.\d{2})?)$/);
         
-        let priceMatch = null;
-        let matchedPrice = null;
-        
-        // Try each pattern until we find a match
-        for (const pattern of pricePatterns) {
-          priceMatch = trimmedLine.match(pattern);
-          if (priceMatch) {
-            matchedPrice = priceMatch[1];
-            break;
+        if (priceMatch) {
+          // This line has a price at the end
+          const fullMatch = priceMatch[0];
+          const priceValue = priceMatch[1];
+          
+          // Extract item name by removing the price from the line
+          let itemName = trimmedLine.substring(0, trimmedLine.lastIndexOf(fullMatch)).trim();
+          
+          // Add any accumulated name lines from previous lines
+          if (currentItem.nameLines.length > 0) {
+            itemName = currentItem.nameLines.join(' ') + (itemName ? ' ' + itemName : '');
           }
-        }
-        
-        if (matchedPrice) {
-          // Extract item name by removing the price and cleaning up
-          let itemName = trimmedLine.replace(matchedPrice, '').trim();
-          // Remove trailing punctuation and extra spaces
+          
+          // Clean up the item name
           itemName = itemName.replace(/[.,;:]+\s*$/, '').trim();
-          // Clean up multiple spaces
           itemName = itemName.replace(/\s+/g, ' ');
           
           if (itemName.length > 0) {
             items.push({
-              id: `${index}-${Date.now()}`,
+              id: `${currentItem.startIndex >= 0 ? currentItem.startIndex : i}-${Date.now()}-${items.length}`,
               name: itemName,
-              price: matchedPrice,
-              fullText: trimmedLine,
+              price: fullMatch,
+              fullText: currentItem.nameLines.length > 0 
+                ? currentItem.nameLines.join('\n') + '\n' + trimmedLine 
+                : trimmedLine,
             });
           }
-        } else if (trimmedLine.length > 3 && !trimmedLine.match(/^[\d\s\-\+\*\/\=]+$/)) {
-          // Include lines that seem like item names (not just numbers)
-          items.push({
-            id: `${index}-${Date.now()}`,
-            name: trimmedLine,
-            price: 'N/A',
-            fullText: trimmedLine,
-          });
+          
+          // Reset current item
+          currentItem = {
+            nameLines: [],
+            price: null,
+            startIndex: -1,
+          };
+        } else {
+          // This line is part of a multi-line item name (no price on this line)
+          if (currentItem.startIndex === -1) {
+            currentItem.startIndex = i;
+          }
+          currentItem.nameLines.push(trimmedLine);
+        }
+      } else {
+        // Not an item line - reset if we were accumulating
+        if (currentItem.nameLines.length > 0) {
+          currentItem = {
+            nameLines: [],
+            price: null,
+            startIndex: -1,
+          };
         }
       }
-    });
+    }
     
     return items;
   };
