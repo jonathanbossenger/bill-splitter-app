@@ -80,7 +80,7 @@ export default function App() {
   };
 
   const markItemLines = (lines) => {
-    const priceRegex = /[\$\€\£]?\d+(\.\d{2})?$/;
+    const priceRegex = /[\$\€\£]?\d+([.,]\d{2})?$/;
     const result = new Array(lines.length).fill(false);
     
     for (let i = 0; i < lines.length; i++) {
@@ -119,7 +119,7 @@ export default function App() {
       
       if (itemLineFlags[i]) {
         // This line is part of an item
-        const priceMatch = trimmedLine.match(/[\$\€\£]?(\d+(\.\d{2})?)$/);
+        const priceMatch = trimmedLine.match(/[\$\€\£]?(\d+([.,]\d{2})?)$/);
         
         if (priceMatch) {
           // This line has a price at the end
