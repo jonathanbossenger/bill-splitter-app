@@ -26,10 +26,13 @@
       },
       "edgeToEdgeEnabled": true,
       "permissions": [
-        "CAMERA",
-        "READ_EXTERNAL_STORAGE",
-        "WRITE_EXTERNAL_STORAGE"
-      ]
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.jonathanbossenger.billsplitterapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -49,6 +52,11 @@
           "photosPermission": "Allow Bill Splitter to access your photos to select bill images."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "7da7329d-b643-4951-a351-987d1cfd4022"
+      }
+    }
   }
 }
